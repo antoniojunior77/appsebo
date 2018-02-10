@@ -1,0 +1,8 @@
+{
+  "name": "appsebo",
+  "app_id": "02a90d53",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
