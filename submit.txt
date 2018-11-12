@@ -1,0 +1,60 @@
+Dim ie
+Set ie = WScript.CreateObject("InternetExplorer.Application")
+Set WshShell = WScript.CreateObject("WScript.Shell")
+ie.navigate("https://trabalhador.certponto.com.br/#/")
+
+ie.width = 900
+ie.height = 600
+ie.Visible = 1
+
+WScript.sleep(5000)
+
+'Home page of user is loaded.
+'Now find the field containing mobile number and type message
+
+Do While ie.Busy Ou ie.readyState <> READYSTATE_COMPLETE 
+    DoEvents 
+Loop 
+
+    'Sending the message
+    ie.document.querySelector("button").Click
+
+    WScript.sleep(5000)
+    Set HTMLDoc = ie.Document
+   ' WScript.echo HTMLDoc
+    For Each oHTML_Element In HTMLDoc.getElementsByTagName("input")
+        If oHTML_Element.Type = "text" or oHTML_Element.Type = "password" Then 'oHTML_Element.Click: Exit For
+            'WScript.echo oHTML_Element.Placeholder
+            if oHTML_Element.Placeholder="CPF" then
+                'oHTML_Element.Value="709.933.191-49"
+                oHTML_Element.Focus
+                WshShell.SendKeys "709.933.191-49"
+
+                 WScript.sleep(8000)
+            end if
+            if oHTML_Element.Placeholder="Senha" then
+                'oHTML_Element.Value="010203"
+                oHTML_Element.Focus
+                WshShell.SendKeys "010203"
+                 WScript.sleep(5000)
+            end if
+        end if
+    Next
+
+    WScript.sleep(5000)
+    ie.document.querySelector("button").Click
+    WScript.sleep(10000)
+    ie.navigate("https://trabalhador.certponto.com.br/#/clock")
+    WScript.sleep(10000)
+
+    Set HTMLDoc2 = ie.Document
+    For Each oHTML_Element2 In HTMLDoc2.getElementsByTagName("input")
+        If oHTML_Element2.Type = "text" Then 'oHTML_Element.Click: Exit For
+             'WScript.echo oHTML_Element2.Placeholder
+                oHTML_Element2.Focus
+                WshShell.SendKeys "70993319149"
+                
+        end if
+    Next
+    WScript.sleep(5000)
+    ie.document.querySelector("button").Click
