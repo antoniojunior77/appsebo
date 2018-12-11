@@ -1,0 +1,35 @@
+Set objShell = CreateObject("Wscript.Shell")
+ 
+objSource = "c:\meus documentos\"
+objDestination1 = "e:\destino1\"
+objDestination2 = "e:\destino2\"
+objDestination3 = "e:\destino3\"
+objDestination4 = "e:\destino4\"
+objDestination5 = "e:\destino5\"
+ 
+
+
+objCommand1 = "RoboCopy.Exe " & Chr(34) & objSource & Chr(34) & " " & Chr(34) & objDestination1 & Chr(34) & " /e /r:1 /w:2"
+objShell.Run(objCommand1)
+
+objCommand2= "RoboCopy.Exe " & Chr(34) & objSource & Chr(34) & " " & Chr(34) & objDestination2 & Chr(34) & " /e /r:1 /w:2"
+objShell.Run(objCommand2)
+
+objCommand3= "RoboCopy.Exe " & Chr(34) & objSource & Chr(34) & " " & Chr(34) & objDestination3 & Chr(34) & " /e /r:1 /w:2"
+objShell.Run(objCommand3)
+ 
+objCommand4= "RoboCopy.Exe " & Chr(34) & objSource & Chr(34) & " " & Chr(34) & objDestination4 & Chr(34) & " /e /r:1 /w:2"
+objShell.Run(objCommand4)
+
+objCommand5= "RoboCopy.Exe " & Chr(34) & objSource & Chr(34) & " " & Chr(34) & objDestination5 & Chr(34) & " /e /r:1 /w:2"
+objShell.Run(objCommand5)
+
+
+'for x=1 to 5
+
+''	objCommand&x = "RoboCopy.Exe " & Chr(34) & objSource & Chr(34) & " " & Chr(34) & objDestination&x & Chr(34) & " /e /r:1 /w:2"
+''	objShell.Run(objCommand&x)
+
+'next
+
+'MsgBox "Done"
