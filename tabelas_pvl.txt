@@ -1,0 +1,311 @@
+USE [PVL]
+GO
+
+/****** Object:  Table [dbo].[Ambiente]    Script Date: 20/12/2018 14:31:53 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Ambiente](
+	[IdAmbiente] [int] IDENTITY(1,1) NOT NULL,
+	[NmAmbiente] [varchar](100) NOT NULL,
+	[NmLegenda] [varchar](100) NULL,
+	[IdAmbienteMacro] [int] NULL,
+ CONSTRAINT [PK_Ambiente] PRIMARY KEY CLUSTERED 
+(
+	[IdAmbiente] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+USE [PVL]
+GO
+
+/****** Object:  Table [dbo].[AmbienteMacro]    Script Date: 20/12/2018 14:32:40 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[AmbienteMacro](
+	[IdAmbienteMacro] [int] IDENTITY(1,1) NOT NULL,
+	[NmAmbienteMacro] [varchar](100) NOT NULL,
+ CONSTRAINT [PK_AmbienteMacro] PRIMARY KEY CLUSTERED 
+(
+	[IdAmbienteMacro] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+USE [PVL]
+GO
+
+/****** Object:  Table [dbo].[CEPTI]    Script Date: 20/12/2018 14:33:06 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[CEPTI](
+	[IdCEPTI] [int] IDENTITY(1,1) NOT NULL,
+	[NmCepti] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IdCEPTI] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+USE [PVL]
+GO
+
+/****** Object:  Table [dbo].[ColetaGeral]    Script Date: 20/12/2018 14:33:29 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[ColetaGeral](
+	[IdColetaGeral] [int] IDENTITY(1,1) NOT NULL,
+	[NmPlataforma] [varchar](255) NULL,
+	[NmCentralizadora] [varchar](255) NULL,
+	[NmSistema] [varchar](255) NULL,
+	[NmAmbiente] [varchar](255) NULL,
+	[QtdErros] [int] NULL,
+	[QtdSucessos] [int] NULL,
+	[DtColeta] [varchar](100) NULL,
+	[DtCadastro] [datetime] NOT NULL,
+	[DtOcorrencia] [varchar](100) NULL,
+ CONSTRAINT [PK__ColetaGe__548AF22450172CF5] PRIMARY KEY CLUSTERED 
+(
+	[IdColetaGeral] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[ColetaGeral] ADD  CONSTRAINT [DF_ColetaGeral_DtCadastro]  DEFAULT (getdate()) FOR [DtCadastro]
+GO
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+USE [PVL]
+GO
+
+/****** Object:  Table [dbo].[ColetaMacro]    Script Date: 20/12/2018 14:34:01 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ColetaMacro](
+	[IdColetaMacro] [int] IDENTITY(1,1) NOT NULL,
+	[Plataforma_idPlataforma] [int] NOT NULL,
+	[Sistema_idSistema] [int] NOT NULL,
+	[Ambiente_IdAmbiente] [int] NULL,
+	[QtdErros] [int] NULL,
+	[QtdSucessos] [int] NULL,
+	[DataColeta] [datetime] NULL,
+	[DtOcorrencia] [datetime] NULL,
+ CONSTRAINT [PK__ColetaMa__C175E306373F5E37] PRIMARY KEY CLUSTERED 
+(
+	[IdColetaMacro] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[ColetaMacro]  WITH CHECK ADD  CONSTRAINT [FK__ColetaMac__Plata__22AA2996] FOREIGN KEY([Plataforma_idPlataforma])
+REFERENCES [dbo].[Plataforma] ([IdPlataforma])
+GO
+
+ALTER TABLE [dbo].[ColetaMacro] CHECK CONSTRAINT [FK__ColetaMac__Plata__22AA2996]
+GO
+
+ALTER TABLE [dbo].[ColetaMacro]  WITH CHECK ADD  CONSTRAINT [FK__ColetaMac__Siste__21B6055D] FOREIGN KEY([Sistema_idSistema])
+REFERENCES [dbo].[Sistema] ([IdSistema])
+GO
+
+ALTER TABLE [dbo].[ColetaMacro] CHECK CONSTRAINT [FK__ColetaMac__Siste__21B6055D]
+GO
+
+ALTER TABLE [dbo].[ColetaMacro]  WITH CHECK ADD  CONSTRAINT [FK_ColetaMacro_Ambiente] FOREIGN KEY([Ambiente_IdAmbiente])
+REFERENCES [dbo].[Ambiente] ([IdAmbiente])
+GO
+
+ALTER TABLE [dbo].[ColetaMacro] CHECK CONSTRAINT [FK_ColetaMacro_Ambiente]
+GO
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+USE [PVL]
+GO
+
+/****** Object:  Table [dbo].[Plataforma]    Script Date: 20/12/2018 14:34:42 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Plataforma](
+	[IdPlataforma] [int] IDENTITY(1,1) NOT NULL,
+	[NmPlataforma] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IdPlataforma] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+USE [PVL]
+GO
+
+/****** Object:  Table [dbo].[Sistema]    Script Date: 20/12/2018 14:35:32 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Sistema](
+	[IdSistema] [int] IDENTITY(1,1) NOT NULL,
+	[CEPTI_idCEPTI] [int] NOT NULL,
+	[NmSistema] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IdSistema] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Sistema]  WITH CHECK ADD FOREIGN KEY([CEPTI_idCEPTI])
+REFERENCES [dbo].[CEPTI] ([IdCEPTI])
+GO
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+USE [PVL]
+GO
+/****** Object:  Trigger [dbo].[TRATAR_VOLUMETRIA]    Script Date: 20/12/2018 14:35:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER TRIGGER [dbo].[TRATAR_VOLUMETRIA]
+ON [dbo].[ColetaGeral]
+FOR INSERT --,UPDATE
+AS
+BEGIN
+    DECLARE
+    @NMPLATAFORMA VARCHAR(100),
+    @DTCOLETA   VARCHAR(100),
+	@NMSISTEMA VARCHAR(100),
+    @NMCENTRALIZADORA  VARCHAR(100),
+	@NMAMBIENTE  VARCHAR(100),
+	@QTDERROS INTEGER,
+	@QTDSUCESSOS INTEGER,
+	@DTOCORRENCIA VARCHAR(100)
+ 
+    SELECT @NMPLATAFORMA = NmPlataforma, 
+		   @DTCOLETA = DtColeta, 
+		   @NMSISTEMA = NmSistema,
+		   @NMCENTRALIZADORA= NmCentralizadora,
+		   @NMAMBIENTE = NmAmbiente,
+		   @QTDSUCESSOS = QtdSucessos,
+		   @QTDERROS = QtdErros,
+		   @DTOCORRENCIA = DtOcorrencia
+		   FROM INSERTED
+
+		DECLARE 
+				@IDPLATAFORMA INTEGER,
+				@IDSISTEMA INTEGER,
+				@IDAMBIENTE INTEGER,
+				@DTCOLETAFORMAT VARCHAR(6),
+				@DTOCORRENCIAFORMAT VARCHAR(15)
+
+		 IF (NOT EXISTS(SELECT IdSistema FROM Sistema WHERE NmSistema = @NMSISTEMA AND CEPTI_idCEPTI = (SELECT top 1 IdCEPTI from CEPTI WITH (NOLOCK)  where NmCepti =UPPER(RTRIM(LTRIM(@NMCENTRALIZADORA))))))
+			BEGIN
+				INSERT INTO Sistema (NmSistema,CEPTI_idCEPTI) VALUES(UPPER(RTRIM(LTRIM(@NMSISTEMA))), (SELECT top 1 IdCEPTI from CEPTI WITH (NOLOCK)  where NmCepti =UPPER(RTRIM(LTRIM(@NMCENTRALIZADORA)))))
+			END
+		 IF(NOT EXISTS(SELECT IdAmbiente FROM Ambiente WHERE NmAmbiente = UPPER(RTRIM(LTRIM(@NMAMBIENTE)))))
+			BEGIN
+				INSERT INTO Ambiente(NmAmbiente) VALUES(UPPER(RTRIM(LTRIM(@NMAMBIENTE))))				
+				-- SET @IDAMBIENTE = @@IDENTITY
+			END
+				SET @DTCOLETAFORMAT = (SUBSTRING(@DTCOLETA,5,2)+SUBSTRING(@DTCOLETA,3,2)+SUBSTRING(@DTCOLETA,1,2));
+				
+				SET @DTOCORRENCIAFORMAT = (SUBSTRING(@DTOCORRENCIA,5,2)+SUBSTRING(@DTOCORRENCIA,3,2)+SUBSTRING(@DTOCORRENCIA,1,2)+' '+SUBSTRING(@DTOCORRENCIA,7,2)+':'+SUBSTRING(@DTOCORRENCIA,9,2)+':'+SUBSTRING(@DTOCORRENCIA,11,2));
+				
+				SELECT TOP 1 @IDPLATAFORMA =IdPlataforma FROM Plataforma WHERE NmPlataforma = UPPER(RTRIM(LTRIM(@NMPLATAFORMA)))
+				SELECT TOP 1 @IDSISTEMA =IdSistema FROM Sistema WHERE NmSistema = UPPER(RTRIM(LTRIM(@NMSISTEMA))) AND CEPTI_idCEPTI = (SELECT top 1 IdCEPTI from CEPTI WITH (NOLOCK)  where NmCepti =UPPER(RTRIM(LTRIM(@NMCENTRALIZADORA))))
+				SELECT TOP 1 @IDAMBIENTE =IdAmbiente FROM Ambiente WHERE NmAmbiente = UPPER(RTRIM(LTRIM(@NMAMBIENTE)))
+
+				INSERT INTO ColetaMacro (Plataforma_idPlataforma,Sistema_idSistema,Ambiente_IdAmbiente, QtdSucessos,QtdErros,DataColeta,DtOcorrencia)
+					VALUES(@IDPLATAFORMA,@IDSISTEMA,@IDAMBIENTE,@QTDSUCESSOS,@QTDERROS, CONVERT(datetime,@DTCOLETAFORMAT),CONVERT(DATETIME,@DTOCORRENCIAFORMAT))
+					---VALUES(@IDPLATAFORMA,@IDSISTEMA,@IDAMBIENTE,@QTDSUCESSOS,@QTDERROS, CONVERT(datetime,@DTCOLETAFORMAT),CONVERT(DATETIME,@DTCOLETAFORMAT))
+
+				
+
+END
+
