@@ -1,0 +1,48 @@
+'Synchronizes one folder to another using the xcopy command.
+
+'INSTRUCTIONS: Copy FolderSync.vbs to the Startup menu in Windows.
+' Set SourceFolder to reference the location on your computer.
+' Set TargetFolder to reference the location to copy files to.
+' Adjust scan time to a desired level. 3 seconds (3000) is default.
+' More time may reduce system lag or HDD lag, less time will make
+' files more quickly available.
+
+Dim SourceFolder: SourceFolder = "C:\SourceFolder"
+Dim TargetFolder: TargetFolder = "T:\NetworkShare" '\\server\share also works
+Dim ScanTime: ScanTime = 3000
+
+'Do not edit
+Dim retval: retval = 0
+Dim objFSO: Set objFSO = CreateObject("Scripting.FileSystemObject")
+
+Set wshShell = WScript.CreateObject ("WSCript.shell")
+
+While retval = 0
+    retval = wshshell.run("%windir%\system32\xcopy.exe """&SourceFolder&"\*.*"" """&TargetFolder&""" /d /y /s", 0, True)
+
+    CheckDeletions TargetFolder,TargetFolder, SourceFolder
+
+    WScript.Sleep(ScanTime) 'milleseconds
+Wend
+
+set wshshell = Nothing 'it will never get here.
+
+
+Sub CheckDeletions(Target, TargetFolder, SourceFolder)
+    Set Folder = objFSO.GetFolder(Target)
+    'check if source folder exists
+    If Not objFSO.FolderExists(Replace(Folder.Path,TargetFolder,SourceFolder)) Then
+        Folder.Delete True 'delete folder because it doesn't exist in the source
+    Else 'check within the folder
+    For Each Subfolder in Folder.SubFolders
+        CheckDeletions Subfolder.Path,TargetFolder,SourceFolder
+    Next
+    'get the files in the folder
+    Set colFiles = Folder.Files
+    For Each objFile in colFiles
+        If Not objFSO.FileExists(Replace(objFile.Path,TargetFolder,SourceFolder)) Then
+            objFile.Delete True 'delete file because it doesn't exist in the source
+        End If
+        Next
+    End If
+End Sub
